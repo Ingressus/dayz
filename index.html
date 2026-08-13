@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой Dashboard</title>
+  
+  <!-- Иконки FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Подключаем CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ВЕРХНИЙ БЛОК: НАВИГАЦИЯ И РАДИО-ПЛЕЕР -->
+  <header class="top-header">
+    <nav class="top-bookmarks">
+      <!-- ВЫПАДАЮЩЕЕ МЕНЮ: ДОМАШНИЙ ПК -->
+      <div class="dropdown">
+        <button class="bookmark-card dropdown-btn">
+          <i class="fa-solid fa-server"></i>
+          <span>Домашний ПК</span>
+          <i class="fa-solid fa-chevron-down arrow-icon"></i>
+        </button>
+        <div class="dropdown-content">
+          <a href="http://100.91.80.111" target="_blank">
+            <i class="fa-solid fa-hard-drive"></i>
+            <span>Основной сервер</span>
+          </a>
+          <a href="private-card.html">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>Приватная карточка</span>
+          </a>
+        </div>
+      </div>
+
+      <a href="https://app.cftools.cloud/dashboard/6994888d1ec33d14c9d49cfc" target="_blank" class="bookmark-card">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>CFTools Cloud</span>
+      </a>
+      <a href="https://github.com" target="_blank" class="bookmark-card">
+        <i class="fa-brands fa-github"></i>
+        <span>GitHub</span>
+      </a>
+      <a href="https://youtube.com" target="_blank" class="bookmark-card">
+        <i class="fa-brands fa-youtube"></i>
+        <span>YouTube</span>
+      </a>
+      <a href="https://google.com" target="_blank" class="bookmark-card">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Поиск</span>
+      </a>
+    </nav>
+
+    <!-- МИНИ РАДИО ПЛЕЕР -->
+    <div class="radio-player-widget">
+      <div class="radio-info">
+        <i class="fa-solid fa-radio radio-icon"></i>
+        <span id="radio-station-name">Radio ROKS Україна</span>
+      </div>
+      <div class="radio-controls">
+        <button id="radio-play-btn" class="radio-btn"><i class="fa-solid fa-play"></i></button>
+        <select id="radio-select">
+          <option value="roks_ua" selected>🎸 Radio ROKS (UA)</option>
+          <option value="rock_planet">⚡ Planet Rock (UK)</option>
+          <option value="radio_nv">🎙️ Радіо NV (Разговорное)</option>
+          <option value="latina">💃 Radio Latina Hits</option>
+          <option value="country">🤠 US Country Radio</option>
+          <option value="classical">🎻 Classic FM / Classical</option>
+          <option value="lofi">☕ Lofi Hip-Hop</option>
+          <option value="relax">🌿 Relax & Chill</option>
+          <option value="synthwave">🌆 Synthwave / Retro</option>
+        </select>
+        <input type="range" id="radio-volume" min="0" max="1" step="0.05" value="0.5">
+      </div>
+      <audio id="audio-element"></audio>
+    </div>
+  </header>
+
+  <!-- ОСНОВНАЯ СЕТКА ДАШБОРДА -->
+  <main class="dashboard-grid">
+    
+    <!-- СЛЕВА: ПОГОДА, ВАЛЮТЫ И СЕРВЕР -->
+    <aside class="sidebar-column">
+      
+      <!-- 1. ВИДЖЕТ ПОГОДЫ -->
+      <section class="widget weather-widget">
+        <div class="weather-header">
+          <h3><i class="fa-solid fa-location-dot"></i> Погода</h3>
+          <span id="current-temp" class="current-temp">--°C</span>
+        </div>
+        <div class="hourly-forecast" id="hourly-forecast">
+          <div class="loading">Загрузка погоды...</div>
+        </div>
+      </section>
+
+      <!-- 2. ВИДЖЕТ КУРСОВ ВАЛЮТ -->
+      <section class="widget currency-widget">
+        <div class="widget-header">
+          <h3><i class="fa-solid fa-coins"></i> Курс валют (НБУ)</h3>
+        </div>
+        <div class="currency-list" id="currency-list">
+          <div class="loading">Загрузка курсов...</div>
+        </div>
+      </section>
+
+      <!-- 3. ВИДЖЕТ СТАТУСА СЕРВЕРА DAYZ -->
+      <section class="widget server-widget">
+        <div class="widget-header">
+          <h3><i class="fa-solid fa-gamepad"></i> FallenLand DayZ</h3>
+          <div class="status-badge">
+            <span class="status-dot online" id="server-dot"></span>
+            <span id="server-status-text">Загрузка...</span>
+          </div>
+        </div>
+        <div class="server-status-body">
+          <div class="server-item">
+            <span class="item-label"><i class="fa-solid fa-arrows-rotate"></i> До рестарта:</span>
+            <span class="item-value highlight-time" id="server-time">--:--:--</span>
+          </div>
+          <div class="server-item">
+            <span class="item-label"><i class="fa-solid fa-users"></i> Игроки в сети:</span>
+            <span class="item-value highlight-players" id="server-players">0 / 60</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="player-progress" style="width: 0%;"></div>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- СПРАВА: РАБОЧИЕ ИНСТРУМЕНТЫ -->
+    <section class="main-content">
+      
+      <!-- ВЕРХНИЙ РЯД: УНИВЕРСАЛЬНЫЙ КОНВЕРТЕР ВРЕМЕНИ И КОНВЕРТЕР ВЕЛИЧИН -->
+      <div class="tools-row">
+        
+        <!-- УНИВЕРСАЛЬНЫЙ КОНВЕРТЕР ВРЕМЕНИ -->
+        <div class="widget sec-converter-widget">
+          <div class="widget-header">
+            <h3><i class="fa-solid fa-clock"></i> Конвертер времени</h3>
+          </div>
+          <div class="time-input-box">
+            <input type="number" id="time-val-input" value="1" min="0" placeholder="Значение...">
+            <select id="time-unit-select">
+              <option value="seconds">Секунды</option>
+              <option value="minutes">Минуты</option>
+              <option value="hours">Часы</option>
+              <option value="days" selected>Дни</option>
+              <option value="weeks">Недели</option>
+              <option value="months">Месяцы</option>
+              <option value="years">Года</option>
+            </select>
+          </div>
+          <div class="sec-results">
+            <div class="sec-item"><span>Секунды:</span><strong id="res-sec">86 400</strong></div>
+            <div class="sec-item"><span>Минуты:</span><strong id="res-min">1 440</strong></div>
+            <div class="sec-item"><span>Часы:</span><strong id="res-hours">24</strong></div>
+            <div class="sec-item"><span>Дни:</span><strong id="res-days">1</strong></div>
+            <div class="sec-item"><span>Недели:</span><strong id="res-weeks">0.14</strong></div>
+            <div class="sec-item"><span>Месяцы:</span><strong id="res-months">0.03</strong></div>
+            <div class="sec-item"><span>Года:</span><strong id="res-years">0.0027</strong></div>
+          </div>
+        </div>
+
+        <!-- КОНВЕРТЕР ВЕЛИЧИН -->
+        <div class="widget converter-widget">
+          <div class="widget-header">
+            <h3><i class="fa-solid fa-calculator"></i> Конвертер величин</h3>
+          </div>
+          <div class="converter-body">
+            <div class="input-group">
+              <label>Тип:</label>
+              <select id="conv-type">
+                <option value="length">Длина (км ↔ мили)</option>
+                <option value="weight">Вес (кг ↔ фунты)</option>
+                <option value="temp">Температура (°C ↔ °F)</option>
+              </select>
+            </div>
+            <div class="conv-inputs">
+              <input type="number" id="conv-from-val" value="1" placeholder="0">
+              <span class="conv-arrow"><i class="fa-solid fa-arrow-right-long"></i></span>
+              <input type="number" id="conv-to-val" readonly placeholder="0">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- БЛОК 1: ГЕНЕРАТОР АНОНСОВ -->
+      <div class="widget generator-widget">
+        <div class="widget-header">
+          <h3><i class="fa-solid fa-bullhorn"></i> Генератор анонсов</h3>
+        </div>
+        
+        <div class="generator-controls">
+          <div class="input-group">
+            <label for="event-type">Тип события:</label>
+            <select id="event-type">
+              <option value="event">🎮 Ивент</option>
+              <option value="noraid">🔨 Без рейд-тайма / Стройка & PVP</option>
+              <option value="restart">🔄 Тех. работы / Перезапуск</option>
+              <option value="wipe">💥 Вайп</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="event-time">Время начала:</label>
+            <input type="text" id="event-time" placeholder="например, о 20:55">
+          </div>
+        </div>
+
+        <div class="generator-output">
+          <textarea id="announcement-text" readonly placeholder="Здесь появится сгенерированный текст..."></textarea>
+          
+          <div class="button-group">
+            <button id="copy-btn" class="btn btn-primary"><i class="fa-solid fa-copy"></i> Скопировать анонс</button>
+            <button id="regenerate-btn" class="btn btn-secondary"><i class="fa-solid fa-arrows-rotate"></i> Сгенерировать заново</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- БЛОК 2: ШПАРГАЛКА И ЗАМЕТКИ -->
+      <div class="widget notes-widget">
+        <div class="widget-header">
+          <h3><i class="fa-solid fa-note-sticky"></i> Шпаргалка & Заметки</h3>
+          <span id="save-status" class="save-status">Сохранено</span>
+        </div>
+        <textarea id="quick-notes" placeholder="Вставьте сюда класснеймы, IP-адреса, команды или любые важные заметки..."></textarea>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Подключаем JS -->
+  <script src="js/script.js"></script>
+</body>
+</html>
